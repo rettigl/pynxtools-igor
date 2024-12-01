@@ -3,15 +3,14 @@ requires = ["setuptools>=64.0.1", "setuptools-scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pynxtools-mpes"
+name = "pynxtools-igor"
 dynamic = ["version"]
 authors = [
     { name = "Florian Dobener" },
-    { name = "Abeer Arora", email = "arora@fhi-berlin.mpg.de" },
     { name = "Laurenz Rettig", email = "rettig@fhi-berlin.mpg.de" },
     { name = "Lukas Pielsticker", email = "lukas.pielsticker@physik.hu-berlin.de" },
 ]
-description = ""
+description = "pynxtools plugin for reading igor pro waves and packed experiments"
 readme = "README.md"
 license= {text = "Apache-2.0"}
 requires-python = ">=3.8"
@@ -28,6 +27,7 @@ dependencies = [
     "h5py>=3.6.0",
     "xarray>=0.20.2",
     "pynxtools>=0.9.0",
+    "igor2",
 ]
 
 [project.optional-dependencies]
@@ -47,20 +47,16 @@ docs = [
     "pymdown-extensions",
     "mkdocs-click"
 ]
-igor = [
-    "igor2",
-]
 
 [project.urls]
-"Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
-"Bug Tracker" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes/issues"
+"Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-igor"
+"Bug Tracker" = "https://github.com/FAIRmat-NFDI/pynxtools-igor/issues"
 
 [project.entry-points."pynxtools.reader"]
-mpes = "pynxtools_mpes.reader:MPESReader"
-igor_fhi = "pynxtools_mpes.igor:IgorReader"
+igor = "pynxtools_igor.reader:IgorReader"
 
 [project.entry-points.'nomad.plugin']
-mpes_example = "pynxtools_mpes.nomad.entrypoints:mpes_example"
+igor_example = "pynxtools_igor.nomad.entrypoints:igor_example"
 
 [tool.setuptools.packages.find]
 where = [
