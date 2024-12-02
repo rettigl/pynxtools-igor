@@ -1,8 +1,0 @@
-title: Title from ELN file
-Instrument:
-  energy_resolution:
-    unit: eV
-    value: 0.14
-Sample:
-  name: My ELN sample name
-  preparation_date: "2019-01-13T09:00:00+00:00"
