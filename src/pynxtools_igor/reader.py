@@ -25,6 +25,7 @@ import numpy as np
 from igor2 import binarywave, packed
 from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
 from pynxtools.dataconverter.readers.utils import parse_yml
+import yaml
 
 logger = logging.getLogger("pynxtools")
 
@@ -157,7 +158,8 @@ class IgorReader(MultiFormatReader):
         return {}
 
     def handle_entry_files(self, file_path: str) -> Dict[str, Any]:
-        entry_dict = parse_yml(file_path)
+        with open(file_path, encoding="utf-8") as file:
+            entry_dict = yaml.safe_load(file)
         self.parse_entry_dict(entry_dict)
         return {}
 

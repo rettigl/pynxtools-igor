@@ -1,10 +1,12 @@
 # Custom Dictionary Words
 binarywave
 bnote
+caplog
 dataconverter
 mypy
 nbstripout
 ndarray
+nxdl
 nxdls
 pynxtools
 pypa

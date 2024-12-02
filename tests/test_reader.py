@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 """
-Basic example based test for the MPES reader
+Basic example based test for the igor reader
 """
 
 from pathlib import Path
@@ -24,19 +24,20 @@ from pathlib import Path
 from pynxtools.testing.nexus_conversion import ReaderTest
 
 
-def test_nexus_conversion(caplog, tmp_path):
+def test_ibw_to_nexus_conversion(caplog, tmp_path):
     """
-    Tests the conversion into nexus.
+    Tests the conversion of multiple ibw files into nexus.
     """
     caplog.clear()
-    dir_path = Path(__file__).parent / "data" / "mpes"
+    dir_path = Path(__file__).parent / "data"
     test = ReaderTest(
-        nxdl="NXmpes",
-        reader_name="mpes",
+        nxdl="NXroot",
+        reader_name="igor",
         files_or_dir=[
-            str(dir_path / "xarray_saved_small_calibration.h5"),
+            str(dir_path / "Norm_0057.ibw"),
+            str(dir_path / "Norm_0057.ibw"),
             str(dir_path / "config_file.json"),
-            str(dir_path / "example.nxs"),
+            str(dir_path / "example_ibw.nxs"),
         ],
         tmp_path=tmp_path,
         caplog=caplog,
@@ -45,20 +46,21 @@ def test_nexus_conversion(caplog, tmp_path):
     test.check_reproducibility_of_nexus()
 
 
-def test_conversion_w_eln_data(caplog, tmp_path):
+def test_ibw_to_nexus_conversion_w_entry(caplog, tmp_path):
     """
-    Tests the conversion with additional ELN data
+    Tests the conversion of multiple ibw files into nexus with entry file.
     """
     caplog.clear()
-    dir_path = Path(__file__).parent / "data" / "mpes"
+    dir_path = Path(__file__).parent / "data"
     test = ReaderTest(
-        nxdl="NXmpes",
-        reader_name="mpes",
+        nxdl="NXroot",
+        reader_name="igor",
         files_or_dir=[
-            str(dir_path / "xarray_saved_small_calibration.h5"),
+            str(dir_path / "Norm_0057.ibw"),
+            str(dir_path / "Norm_0057.ibw"),
             str(dir_path / "config_file.json"),
-            str(dir_path / "eln_data.yaml"),
-            str(dir_path / "example_eln.nxs"),
+            str(dir_path / "Norm57.yaml.entry"),
+            str(dir_path / "example_ibw_entry.nxs"),
         ],
         tmp_path=tmp_path,
         caplog=caplog,
