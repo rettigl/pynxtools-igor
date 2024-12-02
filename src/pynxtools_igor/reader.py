@@ -18,6 +18,7 @@
 """Igor pro reader implementation for the DataConverter."""
 
 import logging
+from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -107,18 +108,17 @@ def iterate_dictionary(dic, key_string):
 class IgorReader(MultiFormatReader):
     """Reader for FHI specific igor binarywave files"""
 
-    supported_nxdls = ["NXmpes", "NXmpes_arpes", "NXxrd", "NXxnb", "NXscan"]
+    supported_nxdls = ["*"]
     config_file: Optional[str] = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ibw_files = []
-        self.ipx_files = []
+        self.pxp_files = []
         self.eln_data = None
-        self.ibw_data = {}
-        self.ibw_attrs = {}
-        self.scan_nos = []
-        self.ipx_entries = {}
+        self.data = {}
+        self.attrs = {}
+        self.entries = {}
 
         self.extensions = {
             ".yml": self.handle_eln_file,
@@ -126,6 +126,7 @@ class IgorReader(MultiFormatReader):
             ".json": self.set_config_file,
             ".ibw": self.handle_ibw_file,
             ".pxp": self.handle_pxp_file,
+            ".entry": self.handle_entry_files,
         }
 
     def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
@@ -146,77 +147,150 @@ class IgorReader(MultiFormatReader):
         return {}
 
     def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
-        if isinstance(objects, dict):
+        if not isinstance(objects, tuple) or not len(objects) == 1:
+            raise ValueError(
+                f"Expect tuple of length 1 as objects, got {type(objects)}"
+            )
+        if not isinstance(objects[0], dict):
             # We expect a dict of entry name dicts with data entries with wave paths as entries
-            for entry in objects.keys():
-                assert isinstance(
-                    objects[entry], dict
-                ), "Need to pass a dict of dicts as objects!"
-                self.ipx_entries[entry] = objects[entry]
-            return {}
+            raise ValueError(f"Expected dict as first object, got {type(objects[0])}!")
+        self.parse_entry_dict(objects[0])
+        return {}
 
-    #        logger.info(
-    #            f"Error while reading objects: {objects} does not contain an xarray object."
-    #            " Skipping the objects."
-    #        )
-    #        return {}
+    def handle_entry_files(self, file_path: str) -> Dict[str, Any]:
+        entry_dict = parse_yml(file_path)
+        self.parse_entry_dict(entry_dict)
+        return {}
+
+    def parse_entry_dict(self, entry_dict: Dict) -> None:
+        for name, entry in entry_dict.items():
+            if not isinstance(entry, dict):
+                raise ValueError(
+                    f"Entry dict need to contain only dicts, got {type(entry)} for key {name}!"
+                )
+            self.entries[name] = entry
 
     def get_data(self, key: str, path: str) -> Any:
-        return self.ibw_data.get(f"{self.callbacks.entry_name}/{path}")
+        return self.data.get(f"{self.callbacks.entry_name}/{path}")
 
     def get_attr(self, key: str, path: str) -> Any:
-        return self.ibw_attrs.get(f"{self.callbacks.entry_name}/{path}")
+        return self.attrs.get(f"{self.callbacks.entry_name}/{path}")
 
     def get_entry_names(self) -> List[str]:
-        if self.ipx_entries:
-            return self.ipx_entries.keys()
+        if self.entries:
+            return self.entries.keys()
         else:
             return ["entry"]
 
-    def post_process(self) -> None:
-        for file in self.ibw_files:
-            ibw = binarywave.load(file)
-            self.ibw_attrs = parse_note(ibw["wave"]["note"])
-            for dim in range(ibw["wave"]["wave_header"]["nDim"].size):
-                self.ibw_data[f"entry/axis{dim}"] = axis_from(ibw, dim)
-                self.ibw_data[f"entry/axis{dim}/@units"] = axis_units_from(ibw, dim)
-            self.ibw_data["entry/data"] = ibw["wave"]["wData"]
-            self.ibw_data["entry/data/@units"] = ibw["wave"]["data_units"]
+    def get_data_dims(self, key: str, path: str) -> List[str]:
+        return self.data.get(f"{self.callbacks.entry_name}/dims")
 
-        assert len(self.ipx_files) <= 1, "Only one pxt file can be read at a time."
-        for file in self.ipx_files:
+    def post_process(self) -> None:
+        # parse ibw files
+        self.process_ibw_files()
+
+        assert len(self.pxp_files) <= 1, "Only one pxt file can be read at a time."
+        self.process_pxp_files()
+
+    def process_ibw_files(self):
+        # We create an entry for every ibw file given, with the file name as entry name
+        for file in self.ibw_files:
+            entry = Path(file).name.split(".")[0]
+            self.entries[entry] = {}
+            ibw = binarywave.load(file)
+            # wave notes
+            for key, val in parse_note(ibw["wave"]["note"]).items():
+                self.attrs[f"{entry}/note/{key}"] = val
+            dims = []
+            for dim in range(ibw["wave"]["wave_header"]["nDim"].size):
+                if ibw["wave"]["wave_header"]["nDim"][dim] > 0:
+                    self.data[f"{entry}/axis{dim}.data"] = axis_from(ibw, dim)
+                    self.data[f"{entry}/axis{dim}.units"] = axis_units_from(ibw, dim)
+                    self.data[f"{entry}/axis{dim}.index"] = dim
+                    dims.append(f"axis{dim}")
+            self.data[f"{entry}/dims"] = dims
+            self.data[f"{entry}/data"] = ibw["wave"]["wData"]
+            self.data[f"{entry}/data.units"] = ibw["wave"]["data_units"]
+
+    def process_pxp_files(self):
+        for file in self.pxp_files:
             _, pxp = packed.load(file)
-            for entry, entry_dict in self.ipx_entries.items():
+            for entry, entry_dict in self.entries.items():
+                if "data" not in entry_dict.keys():
+                    raise ValueError(f"'data' not found for entry {entry}.")
                 data_wave = iterate_dictionary(pxp, entry_dict["data"])
-                if data_wave:
-                    self.ibw_data[f"{entry}/data"] = data_wave.wave["wave"]["wData"]
-                if "error" in entry_dict:
-                    error_wave = iterate_dictionary(pxp, entry_dict["error"])
-                    if error_wave:
-                        self.ibw_data[f"{entry}/error"] = error_wave.wave["wave"][
-                            "wData"
-                        ]
-                for dim in range(4):
-                    if f"ax{dim}" in entry_dict:
-                        self.ibw_data[f"{entry}/ax{dim}"] = iterate_dictionary(
-                            pxp, entry_dict[f"ax{dim}"]
-                        ).wave["wave"]["wData"]
-                    else:
-                        if data_wave:
-                            self.ibw_data[f"{entry}/ax{dim}"] = axis_from(
+                if not data_wave:
+                    raise ValueError(
+                        f"'data' wave {entry_dict['data']} not found in file {file}."
+                    )
+                # wave notes
+                for key, val in parse_note(data_wave.wave["wave"]["note"]).items():
+                    self.attrs[f"{entry}/note/{key}"] = val
+                # axes
+                dims = []
+                for dim in range(data_wave.wave["wave"]["wave_header"]["nDim"].size):
+                    if data_wave.wave["wave"]["wave_header"]["nDim"][dim] > 0:
+                        if f"axis{dim}_name" in entry_dict:
+                            axis_name = entry_dict[f"axis{dim}_name"]
+                        else:
+                            axis_name = f"axis{dim}"
+                        # use axis wave if provided
+                        if f"axis{dim}" in entry_dict:
+                            axis_wave = iterate_dictionary(
+                                pxp, entry_dict[f"axis{dim}"]
+                            )
+                            if not axis_wave:
+                                raise ValueError(
+                                    f"'axis{dim}' wave {entry_dict[f'axis{dim}']} not found in file {file}."
+                                )
+                            self.data[f"{entry}/{axis_name}.data"] = axis_wave.wave[
+                                "wave"
+                            ]["wData"]
+                            self.data[f"{entry}/{axis_name}.units"] = axis_wave.wave[
+                                "wave"
+                            ]["data_units"]
+                        else:
+                            self.data[f"{entry}/{axis_name}.data"] = axis_from(
                                 data_wave.wave, dim
                             )
+                            self.data[f"{entry}/{axis_name}.units"] = axis_units_from(
+                                data_wave.wave, dim
+                            )
+                        if f"axis{dim}_units" in entry_dict:
+                            self.data[f"{entry}/{axis_name}.units"] = entry_dict[
+                                f"axis{dim}_units"
+                            ]
+
+                        self.data[f"{entry}/{axis_name}.index"] = dim
+                        dims.append(axis_name)
+                # errors
+                if "error" in entry_dict:
+                    error_wave = iterate_dictionary(pxp, entry_dict["error"])
+                    if not error_wave:
+                        raise ValueError(
+                            f"'error' wave {entry_dict['error']} not found in file {file}."
+                        )
+                    self.data[f"{entry}/error"] = error_wave.wave["wave"]["wData"]
+
+                self.data[f"{entry}/dims"] = dims
+                self.data[f"{entry}/data"] = data_wave.wave["wave"]["wData"]
+                if "data_units" in entry_dict:
+                    self.data[f"{entry}/data.units"] = entry_dict["data_units"]
+                else:
+                    self.data[f"{entry}/data.units"] = data_wave.wave["wave"][
+                        "data_units"
+                    ]
 
                 if "metadata" in entry_dict.keys():
                     for key, val in entry_dict["metadata"].items():
-                        self.ibw_attrs[f"{entry}/{key}"] = val
+                        self.attrs[f"{entry}/{key}"] = val
 
     def handle_ibw_file(self, file_path: str) -> Dict[str, Any]:
         self.ibw_files.append(file_path)
         return {}
 
     def handle_pxp_file(self, file_path: str) -> Dict[str, Any]:
-        self.ipx_files.append(file_path)
+        self.pxp_files.append(file_path)
         return {}
 
 

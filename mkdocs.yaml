@@ -1,8 +1,8 @@
 site_name: Documentation
 site_description: |
-  The documentation for the pynxtools-mpes plugin.
+  The documentation for the pynxtools-igor plugin.
 site_author: The NOMAD Authors
-repo_url: https://github.com/FAIRmat-NFDI/pynxtools-mpes
+repo_url: https://github.com/FAIRmat-NFDI/pynxtools-igor
 edit_uri: ""
 
 nav:
@@ -15,12 +15,12 @@ nav:
   # - Explanation:
       # - explanation/explanation.md
   - Reference:
-      - reference/mpes.md
+      - reference/igor.md
 
 plugins:
   - search
   - macros:
-      module_name: src/pynxtools_mpes/mkdocs
+      module_name: src/pynxtools_igor/mkdocs
 
 theme:
   name: material
