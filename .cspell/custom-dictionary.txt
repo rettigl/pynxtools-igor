@@ -1,7 +1,13 @@
 # Custom Dictionary Words
+binarywave
+bnote
+dataconverter
 mypy
 nbstripout
+ndarray
+nxdls
 pynxtools
 pypa
 pypi
 pyupgrade
+Xroot
