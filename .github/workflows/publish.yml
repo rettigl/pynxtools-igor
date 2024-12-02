@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/pynxtools-mpes
+      url: https://pypi.org/p/pynxtools-igor
     permissions:
       id-token: write
     steps:

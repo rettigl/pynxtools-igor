@@ -1,0 +1,7 @@
+# Custom Dictionary Words
+mypy
+nbstripout
+pynxtools
+pypa
+pypi
+pyupgrade
