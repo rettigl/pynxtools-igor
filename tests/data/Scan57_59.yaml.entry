@@ -1,0 +1,16 @@
+Scan57:
+  axis0: root/Raw/SPECScan_0057/QWave
+  axis0_name: l
+  axis0_units: r.l.u.
+  data: root/Norm_0057
+  data_units: counts/monitor
+  metadata:
+    entry_title: Scan at 16 K
+Scan59:
+  axis0: root/Raw/SPECScan_0059/QWave
+  axis0_name: l
+  axis0_units: r.l.u.
+  data: root/Norm_0059
+  data_units: counts/monitor
+  metadata:
+    entry_title: Scan at 18 K

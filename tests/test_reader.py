@@ -67,3 +67,25 @@ def test_ibw_to_nexus_conversion_w_entry(caplog, tmp_path):
     )
     test.convert_to_nexus(caplog_level="WARNING", ignore_undocumented=False)
     test.check_reproducibility_of_nexus()
+
+
+def test_pxp_to_nexus_conversion(caplog, tmp_path):
+    """
+    Tests the conversion of multiple ibw files into nexus with entry file.
+    """
+    caplog.clear()
+    dir_path = Path(__file__).parent / "data"
+    test = ReaderTest(
+        nxdl="NXroot",
+        reader_name="igor",
+        files_or_dir=[
+            str(dir_path / "config_file.json"),
+            str(dir_path / "Fig2a.pxp"),
+            str(dir_path / "Scan57_59.yaml.entry"),
+            str(dir_path / "example_pxp.nxs"),
+        ],
+        tmp_path=tmp_path,
+        caplog=caplog,
+    )
+    test.convert_to_nexus(caplog_level="WARNING", ignore_undocumented=False)
+    test.check_reproducibility_of_nexus()
