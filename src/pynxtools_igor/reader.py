@@ -212,7 +212,7 @@ class IgorReader(MultiFormatReader):
         entry = ""
         entry_dict = {}
         for en, ed in self.entries.items():
-            if ed.get("data", "") == file:
+            if ed.get("data", "") == Path(file).name:
                 entry = en
                 entry_dict = ed
                 break

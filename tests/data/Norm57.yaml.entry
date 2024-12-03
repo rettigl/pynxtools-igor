@@ -1,0 +1,5 @@
+Scan57:
+  axis0_name: theta
+  axis0_units: degree
+  data: Norm_0057.ibw
+  data_units: counts/monitor

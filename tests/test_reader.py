@@ -34,9 +34,9 @@ def test_ibw_to_nexus_conversion(caplog, tmp_path):
         nxdl="NXroot",
         reader_name="igor",
         files_or_dir=[
-            str(dir_path / "Norm_0057.ibw"),
-            str(dir_path / "Norm_0057.ibw"),
             str(dir_path / "config_file.json"),
+            str(dir_path / "Norm_0057.ibw"),
+            str(dir_path / "Norm_0059.ibw"),
             str(dir_path / "example_ibw.nxs"),
         ],
         tmp_path=tmp_path,
@@ -56,9 +56,9 @@ def test_ibw_to_nexus_conversion_w_entry(caplog, tmp_path):
         nxdl="NXroot",
         reader_name="igor",
         files_or_dir=[
-            str(dir_path / "Norm_0057.ibw"),
-            str(dir_path / "Norm_0057.ibw"),
             str(dir_path / "config_file.json"),
+            str(dir_path / "Norm_0057.ibw"),
+            str(dir_path / "Norm_0059.ibw"),
             str(dir_path / "Norm57.yaml.entry"),
             str(dir_path / "example_ibw_entry.nxs"),
         ],
