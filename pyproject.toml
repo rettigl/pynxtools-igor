@@ -26,7 +26,7 @@ classifiers = [
 dependencies = [
     "h5py>=3.6.0",
     "xarray>=0.20.2",
-    "pynxtools @ git+https://github.com/FAIRmat-NFDI/pynxtools.git@allow_wildcard_definition_in_reader_test",
+    "pynxtools @ git+https://github.com/FAIRmat-NFDI/pynxtools.git",
     "igor2>=0.5.8",
 ]
 
