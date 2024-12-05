@@ -17,7 +17,7 @@
         "BEAM[beam]": {
             "distance": 0.0,
             "distance/@units": "mm",
-            "incident_energy": "@data:ax0",
+            "incident_energy": "@data:energy.data",
             "incident_energy/@units": "eV",
             "pulse_duration": "['@eln:/ENTRY/Instrument/Beam/Probe/pulse_duration', '@attrs:instrument/beam/probe/pulse_duration']",
             "pulse_duration/@units": "ps",
@@ -39,12 +39,12 @@
         "temperature": "20",
         "temperature/@units": "K"
   },
-    
-    "/ENTRY/DATA[data]/@axes": ["energy"],
-    "/ENTRY/DATA[data]/@signal": "diffraction_intensity",
-    "/ENTRY/DATA[data]/diffraction_intensity": "@data:data",
-    "/ENTRY/DATA[data]/diffraction_intensity/@units": "@attrs:data/@units",
-    "/ENTRY/DATA[data]/energy": "@data:ax0",
-    "/ENTRY/DATA[data]/energy/@units": "@attrs:ax0/@units",
-    "/ENTRY/DATA[data]/@energy_indices": 0
+  "/ENTRY/DATA[data]/@axes": "@data:dims",
+  "/ENTRY/DATA[data]/@signal": "data",
+  "/ENTRY/DATA[data]/AXISNAME_indices[@*_indices]": "@data:*.index",
+  "/ENTRY/DATA[data]/data": "@data:data",
+  "/ENTRY/DATA[data]/data_errors": "@data:data.errors",  
+  "/ENTRY/DATA[data]/data/@units": "@data:data.units",
+  "/ENTRY/DATA[data]/AXISNAME[*]": "@data:*.data",
+  "/ENTRY/DATA[data]/AXISNAME[*]/@units": "@data:*.units"
 }

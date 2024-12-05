@@ -310,13 +310,13 @@ class IgorReader(MultiFormatReader):
                     self.data[f"{entry}/{axis_name}.index"] = dim
                     dims.append(axis_name)
             # data errors
-            if "error" in entry_dict:
-                error_wave = iterate_dictionary(pxp, entry_dict["error"])
+            if "data_errors" in entry_dict:
+                error_wave = iterate_dictionary(pxp, entry_dict["data_errors"])
                 if not error_wave:
                     raise ValueError(
-                        f"'error' wave {entry_dict['error']} not found in file {file}.",
+                        f"'data_errors' wave {entry_dict['data_errors']} not found in file {file}.",
                     )
-                self.data[f"{entry}/error"] = error_wave.wave["wave"]["wData"]
+                self.data[f"{entry}/data.errors"] = error_wave.wave["wave"]["wData"]
 
             # data
             self.data[f"{entry}/dims"] = dims

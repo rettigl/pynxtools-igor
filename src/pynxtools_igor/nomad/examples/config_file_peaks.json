@@ -39,12 +39,11 @@
         "temperature": "@attrs:sample/temperature",
         "temperature/@units": "K"
   },
-    
-    "/ENTRY/DATA[data]/@axes": ["l"],
-    "/ENTRY/DATA[data]/@signal": "diffraction_intensity",
-    "/ENTRY/DATA[data]/diffraction_intensity": "@data:data",
-    "/ENTRY/DATA[data]/diffraction_intensity/@units": "@attrs:data/@units",
-    "/ENTRY/DATA[data]/l": "@data:ax0",
-    "/ENTRY/DATA[data]/l/@units": "@attrs:ax0/@units",
-    "/ENTRY/DATA[data]/@l_indices": 0
+    "/ENTRY/DATA[data]/@axes": "@data:dims",
+    "/ENTRY/DATA[data]/@signal": "data",
+    "/ENTRY/DATA[data]/AXISNAME_indices[@*_indices]": "@data:*.index",
+    "/ENTRY/DATA[data]/data": "@data:data",
+    "/ENTRY/DATA[data]/data/@units": "@data:data.units",
+    "/ENTRY/DATA[data]/AXISNAME[*]": "@data:*.data",
+    "/ENTRY/DATA[data]/AXISNAME[*]/@units": "@data:*.units"
 }

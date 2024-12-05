@@ -56,13 +56,12 @@
         "temperature": "@attrs:sample/temperature",
         "temperature/@units": "K"
   },
-    
-    "/ENTRY/DATA[data]/@axes": ["pump_probe_delay"],
-    "/ENTRY/DATA[data]/@signal": "normalized_ordered_moments",
-    "/ENTRY/DATA[data]/normalized_ordered_moments": "@data:data",
-    "/ENTRY/DATA[data]/normalized_ordered_moments/@units": "@attrs:data/@units",
-    "/ENTRY/DATA[data]/normalized_ordered_moments_errors": "@data:error",
-    "/ENTRY/DATA[data]/pump_probe_delay": "@data:ax0",
-    "/ENTRY/DATA[data]/pump_probe_delay/@units": "@attrs:ax0/@units",
-    "/ENTRY/DATA[data]/@pump_probe_delay_indices": 0
+  "/ENTRY/DATA[data]/@axes": "@data:dims",
+  "/ENTRY/DATA[data]/@signal": "data",
+  "/ENTRY/DATA[data]/AXISNAME_indices[@*_indices]": "@data:*.index",
+  "/ENTRY/DATA[data]/data": "@data:data",
+  "/ENTRY/DATA[data]/data_errors": "@data:data.errors",  
+  "/ENTRY/DATA[data]/data/@units": "@data:data.units",
+  "/ENTRY/DATA[data]/AXISNAME[*]": "@data:*.data",
+  "/ENTRY/DATA[data]/AXISNAME[*]/@units": "@data:*.units"
 }
