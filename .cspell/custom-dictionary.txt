@@ -24,9 +24,11 @@ kernelspec
 Laurenz
 linenums
 Lukas
+mainfile
 ndarray
 nxdl
 nxdls
+orcid
 Pielsticker
 pymdownx
 pynxtools

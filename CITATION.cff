@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+title: 'pynxtools-igor: A pynxtools reader plugin for Wavemetrics Igor Pro data'
+version: 0.1.0
+message:
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Florian
+    family-names: Dobener
+    orcid: 'https://orcid.org/0000-0003-1987-6224'
+  - given-names: Laurenz
+    family-names: Rettig
+    orcid: 'https://orcid.org/0000-0002-0725-6696'
+  - given-names: Lukas
+    family-names: Pielsticker
+    orcid: 'https://orcid.org/0000-0001-9361-8333'
+
+doi: TODO
+repository-code: 'https://github.com/FAIRmat-NFDI/pynxtools-igor'
+url: TODO
+keywords:
+  - Wavemetrics
+  - Igor Pro
+  - NOMAD
+  - pynxtools
+  - NeXus
+abstract:
+  pynxtools-igor is a free, and open-source data software for converting data stored 
+  with Wavemetrics [Igor Pro](https://www.wavemetrics.com/) into the [NeXus](https://www.nexusformat.org/) 
+  format. It is implemented as a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) and 
+  allows to read, translate, and standardize data from Igor Pro binary waves and packed experiment files. 
+  Depending on the domain of data, pynxtools allows to ensure compliance with various NeXus application 
+  definitions.
+
+  pynxtools-igor is developed both as a standalone reader and as a tool within NOMAD, an open-source data
+  management platform for materials science ((https://nomad-lab.eu/nomad-lab/).
+
+  The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat)
+  (https://gepris.dfg.de/gepris/projekt/460197019?language=en).
+license: Apache-2.0
