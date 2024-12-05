@@ -1,4 +1,4 @@
-# Convert MPES data and metadata to NeXus
+# Convert Igor pro data and metadata to NeXus
 
 ## Who is this tutorial for?
 
@@ -12,40 +12,41 @@ into a standardized NeXus format.
 
 ## What you will know at the end of this tutorial?
 
-You will have a basic understanding how to use pynxtools-mpes for converting your MPES data to a NeXus/HDF5 file.
+You will have a basic understanding how to use pynxtools-igor for converting your Igor Pro data to a NeXus/HDF5 file.
 
 ## Steps
 
 ### Installation
-See [here](./installation.md) for how to install pynxtools together with the MPES reader plugin.
+See [here](./installation.md) for how to install pynxtools together with the Igor reader plugin.
 
 ### Running the reader from the command line
-An example script to run the MPES reader in `pynxtools`:
+An example script to run the igor reader in `pynxtools`:
 ```sh
  ! dataconverter \
---reader mpes \
---nxdl NXmpes_arpes \
-$<mpes-file path> \
+--reader igor \
+--nxdl NXroot \
+$<igor-file path> \
 $<eln-file path> \
+$<entry-file path> \
 -c $<config-file path> \
 --output <output-file path>.nxs
 ```
 
 ### Examples
 
-You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline in [`src/pynxtools-mpes/nomad/examples`](../../src/pynxtools_mpes/nomad/examples/). These are designed for working with [`NOMAD`](https://nomad-lab.eu/) and its [`NOMAD Remote Tools Hub (NORTH)`](https://nomad-lab.eu/prod/v1/gui/analyze/north).
+You can find various examples how to use `pynxtools-igor` for your Igor Pro research data pipeline in [`src/pynxtools-igor/nomad/examples`](../../src/pynxtools_igor/nomad/examples/). These are designed for working with [`NOMAD`](https://nomad-lab.eu/) and its [`NOMAD Remote Tools Hub (NORTH)`](https://nomad-lab.eu/prod/v1/gui/analyze/north).
 
-There are also small example files for using the `pynxtools` dataconverter with the `mpes` reader and the `NXmpes` application definition in [`tests/data`](https://github.com/FAIRmat-NFDI/pynxtools.mpes/tree/main/tests/data).
+There are also small example files for using the `pynxtools` dataconverter with the `igor` reader in [`tests/data`](https://github.com/FAIRmat-NFDI/pynxtools.mpes/tree/main/tests/data).
 
 For this tutorial, we will work with this data. You can run the conversion as
 ```shell
 dataconverter \\
-    --reader mpes \\
-    --nxdl NXmpes_arpes \\
-    xarray_saved_small_calibration \\
-    eln_data.yaml \\
+    --reader igor \\
+    --nxdl NXroot \\
+    Norm_0057.ibw \\
+    Norm_0059.ibw \\
     -c  config_file.json \\
-    --output mpes_example.nxs
+    --output example_ibw.nxs
 ```
 
-**Congrats! You now have a FAIR NeXus file!**
+**Congrats! You now have a NeXus file generated from the igor binary wave files!**

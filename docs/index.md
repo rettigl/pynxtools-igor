@@ -2,13 +2,11 @@
 hide: toc
 ---
 
-# Documentation for pynxtools-mpes
+# Documentation for pynxtools-igor
 
-pynxtools-mpes is a free, and open-source data software for harmonizing multidimensional photoemission spectroscopy (MPES) data and metadata for research data management using [NeXus](https://www.nexusformat.org/).
+pynxtools-igor is a free, and open-source data software for converting data stored with Wavemetrics [Igor Pro](https://www.wavemetrics.com/) into the [NeXus](https://www.nexusformat.org/) format. It is implemented as a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) and allows to read, translate, and standardize data from Igor Pro binary waves and packed experiment files. Depending on the domain of data, pynxtools allows to ensure compliance with various NeXus application definitions, e.g. [NXmpes](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes.html) for for angle-resolved photoemission spectroscopy (ARPES) experiments, or [NXxrd](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXxrd.html) for x-ray diffraction experiments.
 
-pynxtools-mpes is a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) for reading, translating, and standardizing MPES data from different sources such that it is compliant with the NeXus application definition [`NXmpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes.html). In addition, it also supports the specialized application definition [`NXmpes_arpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes_arpes.html) for angle-resolved photoemission spectroscopy (ARPES) experiments.
-
-pynxtools-mpes is developed both as a standalone reader and as a tool within [NOMAD](https://nomad-lab.eu/), which is the open-source data management platform for materials science we are developing within [FAIRmat](https://www.fairmat-nfdi.eu/fairmat/).
+pynxtools-igor is developed both as a standalone reader and as a tool within [NOMAD](https://nomad-lab.eu/), which is the open-source data management platform for materials science we are developing within [FAIRmat](https://www.fairmat-nfdi.eu/fairmat/).
 
 
 <div markdown="block" class="home-grid">
@@ -26,9 +24,7 @@ A series of tutorials giving you an overview on how to store or convert your XPS
 
 ### How-to guides
 
-How-to guides provide step-by-step instructions for a wide range of tasks, with the overarching topics:
-
-- [How to build a new MPES reader](how-tos/build-a-reader.md)
+- coming soon!
 
 </div>
 
@@ -43,9 +39,7 @@ How-to guides provide step-by-step instructions for a wide range of tasks, with 
 
 ### Reference
 
-Here you can learn which specific readers are currently implemented in `pynxtools-mpes`.
-
-- [MPES reader](reference/mpes.md) for data from the [FHI Berlin](https://www.fhi.mpg.de/de) 
+Here you can learn which options are available for configuring the [igor reader](reference/igor.md)
 
 </div>
 </div>

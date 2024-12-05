@@ -13,7 +13,7 @@
             "addWords": true
         }
     ],
-    "dictionaries": [  "custom-dictionary"
+    "dictionaries": [  "custom-dictionary", "python"
     ],
     "words": [],
     "ignoreWords": [],

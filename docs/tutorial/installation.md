@@ -8,7 +8,7 @@ This package is a reader plugin for [`pynxtools`](https://github.com/FAIRmat-NFD
 
 
 ```shell
-pip install pynxtools[mpes]
+pip install pynxtools[igor]
 ```
 
 for the latest development version.
